@@ -1,54 +1,26 @@
 import React, { Component } from "react";
 import Contact from "./Contact";
+import { Consumer } from "../context";
 
 class Contacts extends Component {
   // use contructor for initializing otherwise you can just declar your state
-  state = {
-    contacts: [
-      {
-        id: 1,
-        name: "Emily Johnson",
-        email: "emily@gmail.com",
-        phone: "555-555-5555"
-      },
-      {
-        id: 2,
-        name: "Thomas Anderson",
-        email: "thomas@gmail.com",
-        phone: "888-888-8888"
-      },
-      {
-        id: 3,
-        name: "Javier Gomez",
-        email: "javi@gmail.com",
-        phone: "333-333-3333"
-      }
-    ]
-  };
 
-  deleteContact = id => {
-    const { contacts } = this.state;
-
-    // filter method loops through contacts and returns only contacts not with the same id
-    const newContacts = contacts.filter(contact => contact.id !== id);
-
-    this.setState({
-      contacts: newContacts
-    });
-  };
   render() {
-    const { contacts } = this.state;
+    //   we somehow useing the Consumer here...??? The Fugde LOOK MORE INTO THIS
+    // The Consumer tag lets us utilize the value prop which holds the state rendering the contacts like before
     return (
-      // React.Fragment you can use to eliminate unecessisary div elements
-      <React.Fragment>
-        {contacts.map(contact => (
-          <Contact
-            key={contact.id}
-            contact={contact}
-            deleteClickHandler={this.deleteContact.bind(this, contact.id)}
-          />
-        ))}
-      </React.Fragment>
+      <Consumer>
+        {value => {
+          const { contacts } = value;
+          return (
+            <React.Fragment>
+              {contacts.map(contact => (
+                <Contact key={contact.id} contact={contact} />
+              ))}
+            </React.Fragment>
+          );
+        }}
+      </Consumer>
     );
   }
 }
