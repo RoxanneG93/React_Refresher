@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Contact from "./Contact";
-import { Consumer } from "../context";
+import { Consumer } from "../../context";
 
 class Contacts extends Component {
   // use contructor for initializing otherwise you can just declar your state
@@ -14,6 +14,9 @@ class Contacts extends Component {
           const { contacts } = value;
           return (
             <React.Fragment>
+              <h1 className="display-4 mb-2">
+                Contact <span className="text-danger">List</span>
+              </h1>
               {contacts.map(contact => (
                 <Contact key={contact.id} contact={contact} />
               ))}
