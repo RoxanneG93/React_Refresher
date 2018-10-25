@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import "./contact.css";
 import { Consumer } from "../../context";
+import axios from "axios";
 
 class Contact extends Component {
   // this is another way of setting prop types inside the class
@@ -27,11 +29,20 @@ class Contact extends Component {
 
   //   Now with CONTXT API the delete fucntion takes in the id, and dispatch so it can set
   // the dispatch to the defined DELETE_CONTACT method in the reducer
-  onDeleteClick = (id, dispatch) => {
-    dispatch({
-      type: "DELETE_CONTACT",
-      payload: id
-    });
+  onDeleteClick = async (id, dispatch) => {
+    // using try catch as work-around for not being able to delete from the api directly
+    try {
+      await axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`);
+      dispatch({
+        type: "DELETE_CONTACT",
+        payload: id
+      });
+    } catch (e) {
+      dispatch({
+        type: "DELETE_CONTACT",
+        payload: id
+      });
+    }
   };
   //   If we just run an arrow function on the custom method you DO NOT NEED TO BIND
   //   onShowClick = e => {
@@ -70,6 +81,17 @@ class Contact extends Component {
                   //   hopefully a better way to do this bit below
                   onClick={this.onDeleteClick.bind(this, id, dispatch)}
                 />
+                <Link to={`contact/edit/${id}`}>
+                  <i
+                    className="fas fa-pencil-alt"
+                    style={{
+                      cursor: "pointer",
+                      float: "right",
+                      color: "black",
+                      marginRight: "1rem"
+                    }}
+                  />
+                </Link>
               </h4>
               {showContactInfo ? (
                 <ul className="list-group">
